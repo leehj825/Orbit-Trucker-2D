@@ -25,25 +25,29 @@ class MarketMenu extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 24, decoration: TextDecoration.none)
             ),
             const SizedBox(height: 20),
-            // Need to wrap in StreamBuilder or similar if we want to see cash update immediately
-            // But usually this menu is static until action.
-            // We can rebuild on button press by using StatefulWidget or just let it update next time.
-            Text(
-              "Cash: \$${game.ship.cash.toStringAsFixed(0)}",
-              style: const TextStyle(color: Colors.white, fontSize: 18, decoration: TextDecoration.none)
+
+            ValueListenableBuilder<double>(
+              valueListenable: game.ship.cash,
+              builder: (context, cash, _) {
+                return Text(
+                  "Cash: \$${cash.toStringAsFixed(0)}",
+                  style: const TextStyle(color: Colors.white, fontSize: 18, decoration: TextDecoration.none)
+                );
+              },
             ),
+
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                 game.ship.fuel = 100.0;
-                 // game.ship.cash -= 10; // Logic simplified
+                 game.ship.fuel.value = 100.0;
+                 // game.ship.cash.value -= 10;
               },
               child: const Text("Refuel (Free)")
             ),
             const SizedBox(height: 10),
              ElevatedButton(
               onPressed: () {
-                 game.ship.cash += 50;
+                 game.ship.cash.value += 50;
               },
               child: const Text("Sell Cargo (+\$50)")
             ),

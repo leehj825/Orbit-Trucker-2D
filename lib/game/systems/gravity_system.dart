@@ -16,12 +16,11 @@ class GravitySystem extends Component {
       final direction = planet.position - ship.position;
       final distance = direction.length;
 
-      // Minimal distance to avoid infinity
-      if (distance > 10) {
-        // Force = Mass / Distance^2
-        // We can tune this constant G. Let's assume G=10 for stronger effect or tune planet mass.
-        // Prompt says: Force = (PlanetMass / Distance²)
-        final forceMagnitude = (planet.mass) / (distance * distance);
+      // Force = Mass / (Distance^2 + Softening)
+      // Softening factor of 100 prevents infinite forces at close range.
+      final forceMagnitude = (planet.mass) / (distance * distance + 100);
+
+      if (distance > 0) {
         final force = direction.normalized() * forceMagnitude;
         ship.velocity.add(force * dt);
       }

@@ -87,7 +87,7 @@ class OrbitTruckerGame extends FlameGame {
     docked = false;
     ship.position = Vector2(size.x / 2, size.y * 0.7);
     ship.velocity = Vector2.zero();
-    ship.fuel = 100.0;
+    ship.fuel.value = 100.0;
     ship.angle = 0;
   }
 }

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 
 class Ship extends PositionComponent {
   Vector2 velocity = Vector2.zero();
-  double fuel = 100.0;
-  double cash = 0.0;
+  final ValueNotifier<double> fuel = ValueNotifier<double>(100.0);
+  final ValueNotifier<double> cash = ValueNotifier<double>(0.0);
   bool isThrusting = false;
   double rotationSpeed = 0.0;
 
+  static const double maxVelocity = 500.0;
   static const double _thrustForce = 100.0;
   static const double _rotationRate = 3.0; // Radians per second
   final Paint _paint = Paint()..color = Colors.blue;
@@ -43,12 +44,18 @@ class Ship extends PositionComponent {
 
     angle += rotationSpeed * dt;
 
-    if (isThrusting && fuel > 0) {
+    if (isThrusting && fuel.value > 0) {
       // Vector(0, -1) is UP.
       final direction = Vector2(0, -1)..rotate(angle);
       velocity.add(direction * _thrustForce * dt);
-      fuel -= dt * 5;
-      if (fuel < 0) fuel = 0;
+      fuel.value -= dt * 5;
+      if (fuel.value < 0) fuel.value = 0;
+    }
+
+    // Clamp velocity
+    if (velocity.length > maxVelocity) {
+      velocity.normalize();
+      velocity.scale(maxVelocity);
     }
 
     position.add(velocity * dt);
