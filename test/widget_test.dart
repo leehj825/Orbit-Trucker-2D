@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:app/main.dart';
+import 'package:orbit_trucker_2d/main.dart';
 
 void main() {
   testWidgets('App builds smoke test', (WidgetTester tester) async {
