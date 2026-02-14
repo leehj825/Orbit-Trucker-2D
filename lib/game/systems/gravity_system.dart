@@ -16,6 +16,11 @@ class GravitySystem extends Component {
       final direction = planet.position - ship.position;
       final distance = direction.length;
 
+      // If inside the planet radius, stop gravity to avoid singularities
+      if (distance < planet.radius) {
+        continue;
+      }
+
       // Force = Mass / (Distance^2 + Softening)
       // Softening factor of 100 prevents infinite forces at close range.
       final forceMagnitude = (planet.mass) / (distance * distance + 100);
