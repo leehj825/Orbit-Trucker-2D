@@ -1,7 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import '../orbit_trucker_game.dart';
 
-class Ship extends PositionComponent {
+class Ship extends PositionComponent with HasGameReference<OrbitTruckerGame> {
   Vector2 velocity = Vector2.zero();
   final ValueNotifier<double> fuel = ValueNotifier<double>(100.0);
   final ValueNotifier<double> cash = ValueNotifier<double>(0.0);
@@ -52,6 +53,9 @@ class Ship extends PositionComponent {
       if (fuel.value < 0) fuel.value = 0;
     }
 
+    // Engine Friction
+    velocity *= 0.99;
+
     // Clamp velocity
     if (velocity.length > maxVelocity) {
       velocity.normalize();
@@ -59,6 +63,23 @@ class Ship extends PositionComponent {
     }
 
     position.add(velocity * dt);
+
+    // Screen Boundaries
+    if (position.x < 0) {
+      position.x = 0;
+      velocity.x = 0;
+    } else if (position.x > game.size.x) {
+      position.x = game.size.x;
+      velocity.x = 0;
+    }
+
+    if (position.y < 0) {
+      position.y = 0;
+      velocity.y = 0;
+    } else if (position.y > game.size.y) {
+      position.y = game.size.y;
+      velocity.y = 0;
+    }
   }
 
   // -1 for left, 1 for right, 0 for stop

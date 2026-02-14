@@ -1,5 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'components/ship.dart';
 import 'components/planet.dart';
 import 'systems/gravity_system.dart';
@@ -35,8 +36,10 @@ class OrbitTruckerGame extends FlameGame {
       mass: 500000
     );
 
-    // Ship starts near Planet A
-    ship = Ship()..position = Vector2(centerX, size.y * 0.7);
+    // Ship starts between planets, facing Planet A (Down/180 degrees)
+    ship = Ship()
+      ..position = Vector2(centerX, size.y * 0.5)
+      ..angle = pi;
 
     add(planetA);
     add(planetB);
@@ -85,9 +88,9 @@ class OrbitTruckerGame extends FlameGame {
 
   void resetGame() {
     docked = false;
-    ship.position = Vector2(size.x / 2, size.y * 0.7);
+    ship.position = Vector2(size.x / 2, size.y * 0.5);
     ship.velocity = Vector2.zero();
     ship.fuel.value = 100.0;
-    ship.angle = 0;
+    ship.angle = pi;
   }
 }

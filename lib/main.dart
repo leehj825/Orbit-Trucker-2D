@@ -98,6 +98,7 @@ class _ControlBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTapDown: (_) => onDown(),
       onTapUp: (_) => onUp(),
       onTapCancel: () => onUp(),
