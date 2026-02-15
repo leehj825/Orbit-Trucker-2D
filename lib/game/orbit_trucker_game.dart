@@ -80,10 +80,22 @@ class OrbitTruckerGame extends FlameGame {
 
   void undock() {
     docked = false;
-    // Push ship slightly away to avoid immediate re-dock
-    // Vector pointing away from nearest planet
-    // For simplicity, just up/down depending on planet
-    // ship.position.add(Vector2(0, -10));
+
+    // Find nearest planet to launch from
+    final distA = ship.position.distanceTo(planetA.position);
+    final distB = ship.position.distanceTo(planetB.position);
+    final nearestPlanet = distA < distB ? planetA : planetB;
+
+    // Vector pointing away from planet center
+    final direction = (ship.position - nearestPlanet.position).normalized();
+
+    // Set position to be safely outside landing threshold (radius + 5 + buffer)
+    // Buffer = 20 pixels
+    final safeDistance = nearestPlanet.radius + 25.0;
+    ship.position = nearestPlanet.position + (direction * safeDistance);
+
+    // Give a small initial velocity away from the planet to prevent immediate re-docking
+    ship.velocity = direction * 60.0;
   }
 
   void resetGame() {
